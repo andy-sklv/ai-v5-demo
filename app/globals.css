@@ -226,10 +226,24 @@ body {
   animation: fadeIn .15s var(--ease);
 }
 
-/* статус-оверлей */
+/* статус-оверлей — sticky, без наложения на контент; центр и nowrap на десктопе */
 .stats-overlay {
-  position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  position: sticky;
+  top: 8px;
+
+  margin: 8px auto 0;   /* центрирование и небольшой отступ сверху */
+  transform: none;      /* без translateX-хаков */
+  left: auto;
+  right: auto;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  /* главное: не переносить пилюли на десктопе */
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
   padding: 8px 10px;
   border-radius: 999px;
   border: 1px solid var(--glass-border);
@@ -238,13 +252,30 @@ body {
   box-shadow: var(--shadow);
   z-index: 60;
   animation: fadeIn .2s var(--ease);
+
+  /* чтобы не упираться в края экрана */
+  max-width: calc(100vw - 16px);
 }
+
+/* «пилюли» — без переносов и с фиксированной шириной по содержимому */
 .pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 10px; border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
   background: rgba(255,255,255,0.85);
   border: 1px solid var(--glass-border);
   font-size: 12.5px;
+
+  flex: 0 0 auto;     /* не сжимать и не растягивать */
+  white-space: nowrap;
+}
+
+/* центр по главной оси для обеих частей */
+.pill,
+.stats-overlay {
+  justify-content: center;
 }
 
 /* футер */
@@ -266,7 +297,13 @@ body {
   .prompt { border-radius: 12px; }
   .dock { right: 14px; bottom: 90px; gap: 8px; }
   .dock-btn { padding: 10px 12px; }
-  .stats-overlay { top: 8px; left: 50%; transform: translateX(-50%); }
+
+  /* на очень узких экранах разрешаем перенос, чтобы не было горизонтального скролла страницы */
+  .stats-overlay {
+    top: 8px;
+    flex-wrap: wrap;
+    white-space: normal;
+  }
 }
 
 /* анимации */
